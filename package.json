@@ -1,0 +1,57 @@
+{
+  "name": "phantom-framework",
+  "version": "1.0.0",
+  "description": "A lean, extensible TypeScript/Node.js skeleton for reactive, simulation-heavy apps with Halloween spookiness",
+  "main": "dist/app.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "demo:veiled": "ts-node-dev demos/veiled/app.ts",
+    "demo:cauldron": "ts-node-dev demos/cauldron/app.ts",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": ["typescript", "rxjs", "reactive", "halloween", "spooky", "framework", "plugins"],
+  "author": "Phantom Framework Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/jest": "^29.5.0",
+    "@types/express": "^4.17.0",
+    "@types/jsonwebtoken": "^9.0.0",
+    "@types/cors": "^2.8.0",
+    "@types/compression": "^1.7.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "jest": "^29.6.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "^29.1.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.0",
+    "cypress": "^13.0.0"
+  },
+  "dependencies": {
+    "rxjs": "^7.8.0",
+    "express": "^4.18.0",
+    "jsonwebtoken": "^9.0.0",
+    "ioredis": "^5.3.0",
+    "mqtt": "^5.0.0",
+    "@tensorflow/tfjs-node": "^4.10.0",
+    "winston": "^3.10.0",
+    "yaml": "^2.3.0",
+    "framer-motion": "^10.16.0",
+    "three": "^0.155.0",
+    "socket.io": "^4.7.0",
+    "ml-js": "^6.0.0",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "compression": "^1.7.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

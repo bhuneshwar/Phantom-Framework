@@ -1,0 +1,14 @@
+plugins:
+  - id: echo_haunt
+    path: ./src/plugins/echo.ts
+    class: EchoPlugin
+    dependencies: []
+    permissions:
+      - spectral_write
+    haunt_probability: 0.2
+    containment_level: trusted
+
+version: "1.0.0"
+author: "Phantom Framework"
+description: "Sample plugin manifest for the Echo Haunt demonstration"
+spookiness_level: moderate
