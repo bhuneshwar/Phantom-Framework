@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veiled Voices - Spectral Séance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 50%, #0a0a0a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3rem;
+            color: #8a2be2;
+            text-shadow: 0 0 20px #8a2be2, 0 0 40px #8a2be2;
+            margin-bottom: 10px;
+            animation: flicker 3s infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .seance-chamber {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #8a2be2;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.3);
+            position: relative;
+        }
+
+        .seance-chamber::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #8a2be2, #4b0082, #8a2be2);
+            border-radius: 15px;
+            z-index: -1;
+            animation: borderGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            background: rgba(138, 43, 226, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .control-group h3 {
+            color: #8a2be2;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #8a2be2;
+            border-radius: 5px;
+            color: #e0e0e0;
+            font-family: inherit;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #ba55d3;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #8a2be2, #4b0082);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .participants {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .participants h3 {
+            color: #8a2be2;
+            margin-bottom: 15px;
+        }
+
+        .participant-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .participant {
+            background: rgba(138, 43, 226, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            position: relative;
+        }
+
+        .participant.speaking {
+            border-color: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .participant-name {
+            font-weight: bold;
+            color: #e0e0e0;
+            margin-bottom: 5px;
+        }
+
+        .participant-role {
+            font-size: 0.8rem;
+            color: #8a2be2;
+            text-transform: uppercase;
+        }
+
+        .participant-status {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .messages {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: rgba(138, 43, 226, 0.2);
+            border-left: 3px solid #8a2be2;
+        }
+
+        .message.ai-haunt {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff0000;
+            animation: fadeIn 0.5s ease-in, ghostlyGlow 2s infinite alternate;
+        }
+
+        @keyframes ghostlyGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.3); }
+            100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
+        }
+
+        .message-sender {
+            font-weight: bold;
+            color: #8a2be2;
+            margin-bottom: 5px;
+        }
+
+        .message.ai-haunt .message-sender {
+            color: #ff6666;
+        }
+
+        .message-content {
+            color: #e0e0e0;
+            line-height: 1.4;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #8a2be2;
+            border-radius: 25px;
+            color: #e0e0e0;
+            font-family: inherit;
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            border-radius: 25px;
+        }
+
+        .status-bar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #666;
+        }
+
+        .status-indicator.connected {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .status-indicator.haunted {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+            animation: flicker 1s infinite;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8a2be2;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .participant-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Veiled Voices</h1>
+            <p class="subtitle">Enter the spectral realm of group séance communication</p>
+        </div>
+
+        <!-- Connection Setup -->
+        <div id="setup-screen" class="seance-chamber">
+            <div class="controls">
+                <div class="control-group">
+                    <h3>🕯️ Séance Configuration</h3>
+                    <div class="input-group">
+                        <label for="session-name">Séance Name</label>
+                        <input type="text" id="session-name" placeholder="Enter séance name..." value="Midnight Gathering">
+                    </div>
+                    <div class="input-group">
+                        <label for="max-participants">Maximum Spirits</label>
+                        <select id="max-participants">
+                            <option value="4">4 Spirits</option>
+                            <option value="6" selected>6 Spirits</option>
+                            <option value="8">8 Spirits</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="haunt-intensity">Haunt Intensity</label>
+                        <select id="haunt-intensity">
+                            <option value="0.3">Mild</option>
+                            <option value="0.5" selected>Moderate</option>
+                            <option value="0.8">Terrifying</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="createSeance()">Create Séance Chamber</button>
+                </div>
+
+                <div class="control-group">
+                    <h3>👻 Spirit Identity</h3>
+                    <div class="input-group">
+                        <label for="spirit-name">Your Spirit Name</label>
+                        <input type="text" id="spirit-name" placeholder="Enter your name..." value="">
+                    </div>
+                    <div class="input-group">
+                        <label for="spirit-role">Your Role</label>
+                        <select id="spirit-role">
+                            <option value="participant" selected>Participant</option>
+                            <option value="medium">Medium</option>
+                            <option value="spirit">Spirit Guide</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="session-id">Séance ID (to join existing)</label>
+                        <input type="text" id="session-id" placeholder="Enter séance ID...">
+                    </div>
+                    <button class="btn" onclick="joinSeance()">Join Séance</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Séance Interface -->
+        <div id="seance-screen" class="hidden">
+            <div class="seance-chamber">
+                <div class="participants">
+                    <h3>👥 Spirits in the Circle</h3>
+                    <div id="participant-list" class="participant-list">
+                        <!-- Participants will be populated here -->
+                    </div>
+                </div>
+
+                <div id="messages" class="messages">
+                    <!-- Messages will appear here -->
+                </div>
+
+                <div class="input-area">
+                    <input type="text" id="message-input" class="message-input" placeholder="Speak to the spirits..." maxlength="200">
+                    <button class="btn send-btn" onclick="sendMessage()">Send</button>
+                    <button class="btn" id="audio-toggle" onclick="toggleAudio()">🎤 Enable Audio</button>
+                </div>
+
+                <div class="status-bar">
+                    <div class="status-item">
+                        <div id="connection-status" class="status-indicator"></div>
+                        <span>Connection</span>
+                    </div>
+                    <div class="status-item">
+                        <div id="audio-status" class="status-indicator"></div>
+                        <span>Audio</span>
+                    </div>
+                    <div class="status-item">
+                        <div id="haunt-status" class="status-indicator"></div>
+                        <span>Spectral Activity</span>
+                    </div>
+                    <div class="status-item">
+                        <span id="participant-count">0 spirits present</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="hidden">
+            <div class="seance-chamber">
+                <div class="loading">
+                    Preparing the spectral realm
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket.IO and SimplePeer -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
+    
+    <script>
+        // Global variables
+        let socket = null;
+        let currentSession = null;
+        let audioEnabled = false;
+        let localStream = null;
+        let peers = new Map();
+        let isConnected = false;
+        let hauntLevel = 0;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate random spirit name if not set
+            if (!document.getElementById('spirit-name').value) {
+                const spiritNames = ['Whisper', 'Shadow', 'Echo', 'Mist', 'Phantom', 'Wraith', 'Specter', 'Shade'];
+                const randomName = spiritNames[Math.floor(Math.random() * spiritNames.length)] + Math.floor(Math.random() * 1000);
+                document.getElementById('spirit-name').value = randomName;
+            }
+
+            // Set up message input enter key
+            document.getElementById('message-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Initialize socket connection
+            initializeSocket();
+        });
+
+        function initializeSocket() {
+            socket = io();
+            
+            socket.on('connect', function() {
+                isConnected = true;
+                updateConnectionStatus();
+                console.log('Connected to séance server');
+            });
+
+            socket.on('disconnect', function() {
+                isConnected = false;
+                updateConnectionStatus();
+                console.log('Disconnected from séance server');
+            });
+
+            socket.on('seance_joined', function(data) {
+                currentSession = data.session;
+                showSeanceScreen();
+                updateParticipants(data.participants);
+                addMessage('system', 'System', data.message, true);
+            });
+
+            socket.on('participant_joined', function(data) {
+                updateParticipants([data.participant]);
+                addMessage('system', 'System', `${data.participant.name} has entered the séance`, true);
+            });
+
+            socket.on('participant_left', function(data) {
+                removeParticipant(data.participantId);
+                addMessage('system', 'System', 'A spirit has departed the séance', true);
+            });
+
+            socket.on('spectral_message', function(data) {
+                addMessage('user', data.fromId, data.message, data.haunted);
+            });
+
+            socket.on('ai_haunt', function(data) {
+                addMessage('ai-haunt', `👻 ${getHauntName(data.intensity)}`, data.message, true);
+                updateHauntLevel(data.intensity);
+            });
+
+            socket.on('seance_error', function(data) {
+                alert(data.error);
+                showSetupScreen();
+            });
+
+            // WebRTC signaling
+            socket.on('webrtc_offer', handleWebRTCOffer);
+            socket.on('webrtc_answer', handleWebRTCAnswer);
+            socket.on('webrtc_ice_candidate', handleWebRTCIceCandidate);
+        }
+
+        function createSeance() {
+            const sessionName = document.getElementById('session-name').value;
+            const maxParticipants = parseInt(document.getElementById('max-participants').value);
+            const hauntIntensity = parseFloat(document.getElementById('haunt-intensity').value);
+
+            showLoadingScreen();
+
+            fetch('/api/seance/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sessionName,
+                    maxParticipants,
+                    hauntIntensity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.sessionId) {
+                    document.getElementById('session-id').value = data.sessionId;
+                    joinSeance();
+                } else {
+                    alert('Failed to create séance chamber');
+                    showSetupScreen();
+                }
+            })
+            .catch(error => {
+                console.error('Error creating séance:', error);
+                alert('Failed to create séance chamber');
+                showSetupScreen();
+            });
+        }
+
+        function joinSeance() {
+            const sessionId = document.getElementById('session-id').value;
+            const spiritName = document.getElementById('spirit-name').value;
+            const role = document.getElementById('spirit-role').value;
+
+            if (!sessionId || !spiritName) {
+                alert('Please enter both séance ID and your spirit name');
+                return;
+            }
+
+            showLoadingScreen();
+
+            socket.emit('join_seance', {
+                sessionId,
+                spiritName,
+                role
+            });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+
+            if (!message || !currentSession) {
+                return;
+            }
+
+            socket.emit('spectral_message', {
+                message: message
+            });
+
+            addMessage('user', 'You', message, false);
+            input.value = '';
+        }
+
+        function toggleAudio() {
+            if (!audioEnabled) {
+                enableAudio();
+            } else {
+                disableAudio();
+            }
+        }
+
+        async function enableAudio() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    }, 
+                    video: false 
+                });
+
+                audioEnabled = true;
+                document.getElementById('audio-toggle').textContent = '🎤 Disable Audio';
+                updateAudioStatus();
+
+                // Notify server about audio state
+                socket.emit('audio_state_changed', {
+                    sessionId: currentSession.id,
+                    audioEnabled: true
+                });
+
+                // Set up WebRTC connections with existing participants
+                setupWebRTCConnections();
+
+            } catch (error) {
+                console.error('Failed to enable audio:', error);
+                alert('Failed to access microphone. Please check permissions.');
+            }
+        }
+
+        function disableAudio() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+
+            // Close all peer connections
+            peers.forEach(peer => peer.destroy());
+            peers.clear();
+
+            audioEnabled = false;
+            document.getElementById('audio-toggle').textContent = '🎤 Enable Audio';
+            updateAudioStatus();
+
+            socket.emit('audio_state_changed', {
+                sessionId: currentSession.id,
+                audioEnabled: false
+            });
+        }
+
+        function setupWebRTCConnections() {
+            if (!currentSession || !localStream) return;
+
+            currentSession.participants.forEach(participant => {
+                if (participant.id !== socket.id && participant.audioEnabled) {
+                    createPeerConnection(participant.id, true);
+                }
+            });
+        }
+
+        function createPeerConnection(peerId, isInitiator) {
+            const peer = new SimplePeer({
+                initiator: isInitiator,
+                stream: localStream,
+                config: {
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' }
+                    ]
+                }
+            });
+
+            peers.set(peerId, peer);
+
+            peer.on('signal', data => {
+                if (data.type === 'offer') {
+                    socket.emit('webrtc_offer', {
+                        targetId: peerId,
+                        offer: data,
+                        sessionId: currentSession.id
+                    });
+                } else if (data.type === 'answer') {
+                    socket.emit('webrtc_answer', {
+                        targetId: peerId,
+                        answer: data,
+                        sessionId: currentSession.id
+                    });
+                } else if (data.candidate) {
+                    socket.emit('webrtc_ice_candidate', {
+                        targetId: peerId,
+                        candidate: data,
+                        sessionId: currentSession.id
+                    });
+                }
+            });
+
+            peer.on('stream', stream => {
+                // Create audio element for remote stream
+                const audio = document.createElement('audio');
+                audio.srcObject = stream;
+                audio.autoplay = true;
+                audio.id = `audio-${peerId}`;
+                document.body.appendChild(audio);
+            });
+
+            peer.on('error', error => {
+                console.error('WebRTC error:', error);
+                peers.delete(peerId);
+            });
+
+            peer.on('close', () => {
+                const audio = document.getElementById(`audio-${peerId}`);
+                if (audio) {
+                    audio.remove();
+                }
+                peers.delete(peerId);
+            });
+        }
+
+        function handleWebRTCOffer(data) {
+            const peer = createPeerConnection(data.fromId, false);
+            peer.signal(data.offer);
+        }
+
+        function handleWebRTCAnswer(data) {
+            const peer = peers.get(data.fromId);
+            if (peer) {
+                peer.signal(data.answer);
+            }
+        }
+
+        function handleWebRTCIceCandidate(data) {
+            const peer = peers.get(data.fromId);
+            if (peer) {
+                peer.signal(data.candidate);
+            }
+        }
+
+        function addMessage(type, sender, content, haunted) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            if (haunted) {
+                messageDiv.style.animation = 'fadeIn 0.5s ease-in, ghostlyGlow 2s infinite alternate';
+            }
+
+            messageDiv.innerHTML = `
+                <div class="message-sender">${sender}</div>
+                <div class="message-content">${content}</div>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Update haunt level for AI messages
+            if (type === 'ai-haunt') {
+                updateHauntLevel(0.3 + Math.random() * 0.4);
+            }
+        }
+
+        function updateParticipants(participants) {
+            const participantList = document.getElementById('participant-list');
+            
+            participants.forEach(participant => {
+                if (!document.getElementById(`participant-${participant.id}`)) {
+                    const participantDiv = document.createElement('div');
+                    participantDiv.className = 'participant';
+                    participantDiv.id = `participant-${participant.id}`;
+                    
+                    participantDiv.innerHTML = `
+                        <div class="participant-name">${participant.name}</div>
+                        <div class="participant-role">${participant.role}</div>
+                        <div class="participant-status">
+                            ${participant.audioEnabled ? '🎤 Audio On' : '🔇 Audio Off'}
+                        </div>
+                    `;
+                    
+                    participantList.appendChild(participantDiv);
+                }
+            });
+
+            // Update participant count
+            const totalParticipants = participantList.children.length;
+            document.getElementById('participant-count').textContent = `${totalParticipants} spirits present`;
+        }
+
+        function removeParticipant(participantId) {
+            const participantDiv = document.getElementById(`participant-${participantId}`);
+            if (participantDiv) {
+                participantDiv.remove();
+            }
+
+            // Remove audio element
+            const audio = document.getElementById(`audio-${participantId}`);
+            if (audio) {
+                audio.remove();
+            }
+
+            // Close peer connection
+            const peer = peers.get(participantId);
+            if (peer) {
+                peer.destroy();
+                peers.delete(participantId);
+            }
+
+            // Update participant count
+            const totalParticipants = document.getElementById('participant-list').children.length;
+            document.getElementById('participant-count').textContent = `${totalParticipants} spirits present`;
+        }
+
+        function updateConnectionStatus() {
+            const indicator = document.getElementById('connection-status');
+            if (isConnected) {
+                indicator.className = 'status-indicator connected';
+            } else {
+                indicator.className = 'status-indicator';
+            }
+        }
+
+        function updateAudioStatus() {
+            const indicator = document.getElementById('audio-status');
+            if (audioEnabled) {
+                indicator.className = 'status-indicator connected';
+            } else {
+                indicator.className = 'status-indicator';
+            }
+        }
+
+        function updateHauntLevel(intensity) {
+            hauntLevel = Math.max(hauntLevel, intensity);
+            const indicator = document.getElementById('haunt-status');
+            
+            if (hauntLevel > 0.7) {
+                indicator.className = 'status-indicator haunted';
+            } else if (hauntLevel > 0.3) {
+                indicator.className = 'status-indicator connected';
+            } else {
+                indicator.className = 'status-indicator';
+            }
+
+            // Decay haunt level over time
+            setTimeout(() => {
+                hauntLevel = Math.max(0, hauntLevel * 0.9);
+                updateHauntLevel(0);
+            }, 5000);
+        }
+
+        function getHauntName(intensity) {
+            if (intensity > 0.8) return 'Ancient Oracle';
+            if (intensity > 0.5) return 'Melancholy Spirit';
+            return 'Mischievous Whisper';
+        }
+
+        function showSetupScreen() {
+            document.getElementById('setup-screen').classList.remove('hidden');
+            document.getElementById('seance-screen').classList.add('hidden');
+            document.getElementById('loading-screen').classList.add('hidden');
+        }
+
+        function showSeanceScreen() {
+            document.getElementById('setup-screen').classList.add('hidden');
+            document.getElementById('seance-screen').classList.remove('hidden');
+            document.getElementById('loading-screen').classList.add('hidden');
+        }
+
+        function showLoadingScreen() {
+            document.getElementById('setup-screen').classList.add('hidden');
+            document.getElementById('seance-screen').classList.add('hidden');
+            document.getElementById('loading-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

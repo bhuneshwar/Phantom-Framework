@@ -1,0 +1,36 @@
+plugins:
+  - id: webrtc_seance
+    path: ./plugins/webrtc.ts
+    class: WebRTCSeancePlugin
+    dependencies: []
+    permissions:
+      - network_access
+      - spectral_write
+      - haunt_others
+    haunt_probability: 0.4
+    containment_level: trusted
+
+  - id: ai_haunt_master
+    path: ./plugins/aiHaunt.ts
+    class: AIHauntPlugin
+    dependencies: ["webrtc_seance"]
+    permissions:
+      - network_access
+      - spectral_write
+      - haunt_others
+    haunt_probability: 0.6
+    containment_level: trusted
+
+  - id: sentiment_oracle
+    path: ./plugins/sentiment.ts
+    class: SentimentOraclePlugin
+    dependencies: ["webrtc_seance"]
+    permissions:
+      - spectral_write
+    haunt_probability: 0.3
+    containment_level: trusted
+
+version: "1.0.0"
+author: "Veiled Voices Coven"
+description: "WebRTC séance plugins for group audio communication with AI haunts"
+spookiness_level: terrifying

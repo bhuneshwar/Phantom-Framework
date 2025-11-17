@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@phantom/*": ["../../src/*"],
+      "@core/*": ["../../src/core/*"],
+      "@security/*": ["../../src/security/*"],
+      "@scaling/*": ["../../src/scaling/*"],
+      "@ui/*": ["../../src/ui/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../../src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
